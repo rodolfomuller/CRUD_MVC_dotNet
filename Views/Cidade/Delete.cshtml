@@ -1,0 +1,55 @@
+﻿@model CRUD.Models.Cidade
+
+@{
+    ViewData["Title"] = "Deletar cidade";
+}
+<h3>Deseja deletar esta cidade?</h3>
+<div>
+    <hr />
+    <dl class="row">
+       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ibge)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ibge)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UFNome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UFNome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegiaoNome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegiaoNome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Longitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Longitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Latitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Latitude)
+        </dd>
+
+
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="submit" value="Deletar" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar</a>
+    </form>
+</div>

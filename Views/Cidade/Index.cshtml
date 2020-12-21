@@ -1,0 +1,145 @@
+﻿
+@model CRUD.Models.CidadeSimples
+
+@{
+    ViewData["Title"] = "Lista de cidades";
+}
+
+<h1>Cidades</h1>
+
+<p>
+    <a asp-action="Create">Adicionar</a>
+</p>
+<table>
+    <tr>
+        <td>
+            Estado
+            <select asp-for="Iduf" asp-items="@Model.UFs" class="form-control" id="selectUF">
+                <option>Selecione um estado</option>
+            </select>
+        </td>
+        <td>
+            Região
+            <select asp-for="Idregiaouf" asp-items="@Model.Regioes" class="form-control" id="selectRegiaoUF" onchange="AtribuirValorRegiao(this)">
+                <option>Selecione uma região</option>
+            </select>
+        </td>
+        <td>
+            Cidade
+            <Input class="form-control" id="txtNomeCidade" />
+            @Html.Hidden("ItemSelecionadoUF", "0", new { id = "ItemSelecionadoUFId" })
+            @Html.Hidden("ItemSelecionadoRegiaoUF", "0", new { id = "ItemSelecionadoRegiaoUFId" })            
+        </td>
+        <td>
+            @Html.ActionLink("Pesquisar", "Index",
+                    new { idUF = ViewBag.ItemSelecionadoId, idRegiaoUF = ViewBag.Idregiaouf, nomeCidade = ViewBag.txtNomeCidade },
+                     new { id = "actionLinkId" })
+        </td>
+    </tr>   
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                IBGE
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Regiao
+            </th>
+            <th>
+                Nome
+            </th>
+            <th>
+                Longitude
+            </th>
+            <th>
+                Latitude
+            </th>
+            <th style="text-align:center">
+                Ação
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CidadeModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ibge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UFNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegiaoNome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Longitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Latitude)
+                </td>
+
+                <td style="min-width: 150px;text-align-last: center;">
+                    @Html.ActionLink("Alterar", "Edit", new { id = item.Id }) | @Html.ActionLink("Deletar", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        function AtribuirValorRegiao(element) {
+            var valor = element.value;
+            document.getElementById("ItemSelecionadoRegiaoUFId").value = valor;
+        }
+        function AtribuirValorUF(element) {
+            var valor = element.value;
+            document.getElementById("ItemSelecionadoUFId").value = valor;
+        }
+
+        function limparFiltros() {    
+            
+            document.getElementById("selectUF").selectedIndex = 0;
+            $("#selectRegiaoUF").empty();
+            $("#selectRegiaoUF").append("<option value='0'>Selecione uma região</option>");
+            $("#txtNomeCidade").value = "";
+        }
+
+        $(function () {
+
+            $("#selectUF").on("change", function () {
+                var Iduf = $("#selectUF").val();
+                document.getElementById("ItemSelecionadoUFId").value = Iduf;
+                $("#selectRegiaoUF").empty();
+                $("#selectRegiaoUF").append("<option value='0'>Selecione uma região</option>");
+                $.getJSON(`Cidade/OnGetRegioesUF?handler=RegioesUF&IdUf=${Iduf}`, (data) => {
+                    $.each(data, function (i, item) {
+                        $("#selectRegiaoUF").append(`<option value="${item.id}">${item.nome}</option>`);
+                    });
+                });
+            });
+
+            $("#actionLinkId").on("click", function () {                   
+                var url = $(this).attr("href");
+                url += ((url.indexOf('?') == -1) ? '?' : '&');
+                url += $.param({
+                    iduf: $("#ItemSelecionadoUFId").val(),
+                    idRegiaoUF: $("#ItemSelecionadoRegiaoUFId").val(),
+                    nomeCidade: $("#txtNomeCidade").val()
+                });                
+                $(this).attr("href", url);   
+                //limparFiltros();
+            });          
+        });
+
+    </script>
+}

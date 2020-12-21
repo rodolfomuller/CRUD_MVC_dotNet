@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CRUD.Models.Relatorio>
+
+@{
+    ViewData["Title"] = "Relatório de quantidades";
+}
+<h1>Relátorio de quantidades</h1>
+
+@Html.ActionLink("Atualizar", "Relatorio", new { /* id=item.PrimaryKey */ }) 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Região
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qtde)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>           
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qtde)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
